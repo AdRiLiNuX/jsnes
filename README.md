@@ -1,12 +1,10 @@
-JSNES
-=====
+# JSNES
 
 A JavaScript NES emulator.
 
 It's a library that works in both the browser and Node.js. The browser UI is available at [https://github.com/bfirsh/jsnes-web](https://github.com/bfirsh/jsnes-web).
 
-Installation
-------------
+## Installation
 
 For Node.js or Webpack:
 
@@ -20,8 +18,7 @@ In the browser, you can use [unpkg](https://unpkg.com):
 <script type="text/javascript" src="https://unpkg.com/jsnes/dist/jsnes.min.js"></script>
 ```
 
-Usage
------
+## Usage
 
 ```javascript
 // Initialize and set up outputs
@@ -33,6 +30,10 @@ var nes = new jsnes.NES({
     // ... play audio sample
   }
 });
+
+// Read ROM data from disk (using Node.js APIs, for the sake of this example)
+const fs = require('fs');
+var romData = fs.readFileSync('path/to/rom.nes', {encoding: 'binary'});
 
 // Load ROM data as a string or byte array
 nes.loadROM(romData);
@@ -51,11 +52,22 @@ nes.frame();
 // ...
 ```
 
-Build
------
+## Build
 
 To build a distribution:
 
     $ yarn run build
 
 This will create `dist/jsnes.min.js`.
+
+## Running tests
+
+    $ yarn test
+
+## Formatting code
+
+All code must conform to [Prettier](https://prettier.io/) formatting. The test suite won't pass unless it does.
+
+To automatically format all your code, run:
+
+    $ yarn run format

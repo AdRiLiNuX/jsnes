@@ -25,11 +25,6 @@ Mappers[0].prototype = {
       this.nes.cpu.mem[address] = value;
       if (address >= 0x6000 && address < 0x8000) {
         // Write to persistent RAM
-        console.log(
-          "onBatteryRamWrite",
-          address.toString(16),
-          value.toString(16)
-        );
         this.nes.opts.onBatteryRamWrite(address, value);
       }
     } else if (address > 0x2007 && address < 0x4000) {
@@ -70,7 +65,9 @@ Mappers[0].prototype = {
   },
 
   regLoad: function(address) {
-    switch (address >> 12) { // use fourth nibble (0xF000)
+    switch (
+      address >> 12 // use fourth nibble (0xF000)
+    ) {
       case 0:
         break;
 
@@ -501,6 +498,7 @@ Mappers[0].prototype = {
     // Does nothing. This is used by the MMC3 mapper.
   },
 
+  // eslint-disable-next-line no-unused-vars
   latchAccess: function(address) {
     // Does nothing. This is used by MMC2.
   },
@@ -744,6 +742,7 @@ Mappers[1].prototype.loadROM = function() {
   this.nes.cpu.requestIrq(this.nes.cpu.IRQ_RESET);
 };
 
+// eslint-disable-next-line no-unused-vars
 Mappers[1].prototype.switchLowHighPrgRom = function(oldSetting) {
   // not yet.
 };
@@ -1365,7 +1364,6 @@ Mappers[34].prototype.write = function(address, value) {
  */
 Mappers[66] = function(nes) {
   this.nes = nes;
-  console.log("Mapper 66");
 };
 
 Mappers[66].prototype = new Mappers[0]();

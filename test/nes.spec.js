@@ -13,11 +13,30 @@ describe("NES", function() {
     var nes = new NES({ onFrame: onFrame });
     fs.readFile("roms/croom/croom.nes", function(err, data) {
       if (err) return done(err);
-      nes.loadROM(data.toString("ascii"));
+      nes.loadROM(data.toString("binary"));
       nes.frame();
       assert(onFrame.calledOnce);
       assert.isArray(onFrame.args[0][0]);
       assert.lengthOf(onFrame.args[0][0], 256 * 240);
+      done();
+    });
+  });
+
+  it("generates the correct frame buffer", function(done) {
+    var onFrame = sinon.spy();
+    var nes = new NES({ onFrame: onFrame });
+    fs.readFile("roms/croom/croom.nes", function(err, data) {
+      if (err) return done(err);
+      nes.loadROM(data.toString("binary"));
+      // Check the first index of a white pixel on the first 6 frames of
+      // output. Croom only uses 2 colors on the initial screen which makes
+      // it easy to detect. Comparing full snapshots of each frame takes too
+      // long.
+      var expectedIndexes = [-1, -1, -1, 2056, 4104, 4104];
+      for (var i = 0; i < 6; i++) {
+        nes.frame();
+        assert.equal(onFrame.lastCall.args[0].indexOf(0xFFFFFF), expectedIndexes[i]);
+      }
       done();
     });
   });
@@ -36,7 +55,7 @@ describe("NES", function() {
     before(function(done) {
       fs.readFile("roms/croom/croom.nes", function(err, data) {
         if (err) return done(err);
-        nes.loadROM(data.toString("ascii"));
+        nes.loadROM(data.toString("binary"));
         done();
       });
     });
